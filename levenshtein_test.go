@@ -2,7 +2,7 @@ package matchr
 
 import "testing"
 
-func TestInsertion(t *testing.T) {
+func TestLevInsertion(t *testing.T) {
     exp := 1
     res := Levenshtein("car", "cars")
     if  res != exp {
@@ -10,7 +10,7 @@ func TestInsertion(t *testing.T) {
     }
 }
 
-func TestSubstitution(t *testing.T) {
+func TestLevSubstitution(t *testing.T) {
     exp := 1
     res := Levenshtein("library", "librari")
     if  res != exp {
@@ -18,7 +18,15 @@ func TestSubstitution(t *testing.T) {
     }
 }
 
-func TestNullLeft(t *testing.T) {
+func TestLevDeletion(t *testing.T) {
+    exp := 1
+    res := Levenshtein("library", "librar")
+    if  res != exp {
+        t.Errorf("Levenshtein('library', 'librar') = %v, want %v", res, exp)
+    }
+}
+
+func TestLevNullLeft(t *testing.T) {
     exp := 7
     res := Levenshtein("", "library")
     if  res != exp {
@@ -26,7 +34,7 @@ func TestNullLeft(t *testing.T) {
     }
 }
 
-func TestNullRight(t *testing.T) {
+func TestLevNullRight(t *testing.T) {
     exp := 7
     res := Levenshtein("library", "")
     if  res != exp {
@@ -34,7 +42,7 @@ func TestNullRight(t *testing.T) {
     }
 }
 
-func TestBothNull(t *testing.T) {
+func TestLevBothNull(t *testing.T) {
     exp := 0
     res := Levenshtein("", "")
     if  res != exp {
