@@ -2,6 +2,7 @@ package matchr
 
 import "testing"
 
+// Regular Levenshtein
 func TestLevInsertion(t *testing.T) {
     exp := 1
     res := Levenshtein("car", "cars")
