@@ -2,59 +2,33 @@ package matchr
 
 import "testing"
 
+var damlevtests = []struct {
+	s1   string
+	s2   string
+	dist int
+}{
+	// insertion
+	{"car", "cars", 1},
+	// substitution
+	{"library", "librari", 1},
+	// deletion
+	{"library", "librar", 1},
+	// transposition
+	{"library", "librayr", 1},
+	// one empty, left
+	{"", "library", 7},
+	// one empty, right
+	{"library", "", 7},
+	// two empties
+	{"", "", 0},
+}
+
 // Damerau Levenshtein
-func TestDamLevInsertion(t *testing.T) {
-    exp := 1
-    res := DamerauLevenshtein("car", "cars")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('car', 'cars') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevSubstitution(t *testing.T) {
-    exp := 1
-    res := DamerauLevenshtein("library", "librari")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('library', 'librari') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevDeletion(t *testing.T) {
-    exp := 1
-    res := DamerauLevenshtein("library", "librar")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('library', 'librar') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevTransposition(t *testing.T) {
-    exp := 1
-    res := DamerauLevenshtein("library", "librayr")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('library', 'librayr') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevNullLeft(t *testing.T) {
-    exp := 7
-    res := DamerauLevenshtein("", "library")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('', 'library') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevNullRight(t *testing.T) {
-    exp := 7
-    res := DamerauLevenshtein("library", "")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('library', '') = %v, want %v", res, exp)
-    }
-}
-
-func TestDamLevBothNull(t *testing.T) {
-    exp := 0
-    res := DamerauLevenshtein("", "")
-    if  res != exp {
-        t.Errorf("DamerauLevenshtein('', '') = %v, want %v", res, exp)
-    }
+func TestDamerauLevenshtein(t *testing.T) {
+	for _, tt := range levtests {
+		dist := DamerauLevenshtein(tt.s1, tt.s2)
+		if dist != tt.dist {
+			t.Errorf("DamerauLevenshtein('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
+		}
+	}
 }
