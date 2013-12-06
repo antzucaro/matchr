@@ -2,51 +2,32 @@ package matchr
 
 import "testing"
 
+var levtests = []struct {
+        s1    string
+        s2    string
+        dist  int
+}{
+        // insertion
+        {"car", "cars", 1},
+        // substitution
+        {"library", "librari", 1},
+        // deletion
+        {"library", "librar", 1},
+        // one empty, left
+        {"", "library", 7},
+        // one empty, right
+        {"library", "", 7},
+        // two empties
+        {"", "", 0},
+}
+
+
 // Regular Levenshtein
-func TestLevInsertion(t *testing.T) {
-    exp := 1
-    res := Levenshtein("car", "cars")
-    if  res != exp {
-        t.Errorf("Levenshtein('car', 'cars') = %v, want %v", res, exp)
-    }
-}
-
-func TestLevSubstitution(t *testing.T) {
-    exp := 1
-    res := Levenshtein("library", "librari")
-    if  res != exp {
-        t.Errorf("Levenshtein('library', 'librari') = %v, want %v", res, exp)
-    }
-}
-
-func TestLevDeletion(t *testing.T) {
-    exp := 1
-    res := Levenshtein("library", "librar")
-    if  res != exp {
-        t.Errorf("Levenshtein('library', 'librar') = %v, want %v", res, exp)
-    }
-}
-
-func TestLevNullLeft(t *testing.T) {
-    exp := 7
-    res := Levenshtein("", "library")
-    if  res != exp {
-        t.Errorf("Levenshtein('', 'library') = %v, want %v", res, exp)
-    }
-}
-
-func TestLevNullRight(t *testing.T) {
-    exp := 7
-    res := Levenshtein("library", "")
-    if  res != exp {
-        t.Errorf("Levenshtein('library', '') = %v, want %v", res, exp)
-    }
-}
-
-func TestLevBothNull(t *testing.T) {
-    exp := 0
-    res := Levenshtein("", "")
-    if  res != exp {
-        t.Errorf("Levenshtein('', '') = %v, want %v", res, exp)
-    }
+func TestLevenshtein(t *testing.T) {
+        for _, tt := range levtests {
+            dist := Levenshtein(tt.s1, tt.s2)
+            if dist != tt.dist {
+                t.Errorf("Levenshtein('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
+            }
+        }
 }
