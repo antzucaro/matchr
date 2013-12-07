@@ -1,15 +1,5 @@
 package matchr
 
-func min(a int, b int) (res int) {
-    if a < b {
-        res = a
-    } else {
-        res = b
-    }
-
-    return
-}
-
 func Levenshtein(s1 string, s2 string) (distance int) {
     s1Len := len(s1)
     s2Len := len(s2)

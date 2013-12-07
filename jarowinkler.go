@@ -1,9 +1,5 @@
 package matchr
 
-func NaN(c uint8) bool {
-	return ((c > 57) || (c < 48))
-}
-
 func jaroWinklerBase(s1 string, s2 string,
 	longTolerance bool, winklerize bool) (distance float64) {
 
