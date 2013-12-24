@@ -1,52 +1,39 @@
 package matchr
 
-import "testing"
-
-var metaphonetests = []struct {
-	s1        string
-	metaphone string
-}{
-	{"Ashcraft", "AXKRFT"},
-	{"Ashhhcraft", "AXKRFT"},
-	{"Ashcroft", "AXKRFT"},
-	{"Burroughs", "BRS"},
-	{"Burrows", "BRS"},
-	{"Ekzampul", "EKSMPL"},
-	{"Example", "EKSMPL"},
-	{"Ellery", "ELR"},
-	{"Euler", "ELR"},
-	{"Ghosh", "KHX"},
-	{"Gauss", "KS"},
-	{"Gutierrez", "KTRS"},
-	{"Heilbronn", "HLBRN"},
-	{"Hilbert", "HLBRT"},
-	{"Jackson", "JKSN"},
-	{"Kant", "KNT"},
-	{"Knuth", "N0"},
-	{"Lee", "L"},
-	{"Lukasiewicz", "LKSWKS"},
-	{"Lissajous", "LSJS"},
-	{"Ladd", "LT"},
-	{"Lloyd", "LT"},
-	{"Moses", "MSS"},
-	{"O'Hara", "OHR"},
-	{"Pfister", "PFSTR"},
-	{"Rubin", "RBN"},
-	{"Robert", "RBRT"},
-	{"Rupert", "RPRT"},
-	{"Soundex", "SNTKS"},
-	{"Sownteks", "SNTKS"},
-	{"Tymczak", "TMKSK"},
-	{"VanDeusen", "FNTSN"},
-	{"Washington", "WXNKTN"},
-	{"Wheaton", "WTN"},
-}
+import (
+    "bufio"
+    "compress/gzip"
+    "os"
+    "strings"
+    "testing"
+)
 
 func TestDoubleMetaphone(t *testing.T) {
-	for _, tt := range metaphonetests {
-		metaphone := DoubleMetaphone(tt.s1)
-		if metaphone != tt.metaphone {
-			t.Errorf("DoubleMetaphone('%s') = %v, want %v", tt.s1, metaphone, tt.metaphone)
+    // load gzipped corpus
+    f, err := os.Open("double_metaphone_corpus.txt.gz")
+    if err != nil {
+        panic("Error opening file double_metaphone_corpus.txt.gz! Exiting.")
+    }
+    defer f.Close()
+
+    g, err := gzip.NewReader(f)
+    if err != nil {
+        panic("Error with supposedly gzipped file double_metaphone_corpus.txt.gz! Exiting.")
+    }
+
+    r := bufio.NewReader(g)
+
+    line, err := r.ReadString('\n')
+    for err == nil {
+        line = strings.TrimRight(line, "\n")
+        v := strings.Split(line, "|")
+
+		metaphone, alternate := DoubleMetaphone(v[0])
+		if metaphone != v[1] || alternate != v[2] {
+			t.Errorf("DoubleMetaphone('%s') = (%v, %v), want (%v, %v)", v[0], metaphone, alternate, v[1], v[2])
+            t.FailNow()
 		}
-	}
+
+        line, err = r.ReadString('\n')
+    }
 }
