@@ -95,12 +95,7 @@ func charAt(value *String, index int) rune {
     }
 }
 
-func contains(value *String, start int, length int, criteria string) bool {
-    return substring(value, start, length) == criteria
-}
-
-// TODO: use varargs here, it makes the rest of the code cleaner
-func containsAny(value *String, start int, length int, criteria []string) bool {
+func contains(value *String, start int, length int, criteria ...string) bool {
     substring := substring(value, start, length)
     for _, c := range(criteria) {
         if substring == c {
@@ -185,10 +180,10 @@ func handleC(input *String, result *metaphoneResult, index int) int {
 }
 
 func handleCC(input *String, result *metaphoneResult, index int) int {
-    if containsAny(input, index + 2, 1, []string{"I", "E", "H"}) &&
+    if contains(input, index + 2, 1, "I", "E", "H") &&
        !contains(input, index + 2, 2, "HU") {
         if (index == 1 && charAt(input, index - 1) == 'A') ||
-           (containsAny(input, index - 1, 5, []string{"UCCEE", "UCCES"})) {
+           (contains(input, index - 1, 5, "UCCEE", "UCCES")) {
             result.Add("KS", "KS")
         } else {
             result.Add("X", "X")
@@ -228,14 +223,14 @@ func handleCH(input *String, result *metaphoneResult, index int) int {
 
 func handleD(input *String, result *metaphoneResult, index int) int {
     if contains(input, index, 2, "DG") {
-        if containsAny(input, index + 2, 1, []string{"I", "E", "Y"}) {
+        if contains(input, index + 2, 1, "I", "E", "Y") {
             result.Add("J", "J")
             index += 3
         } else {
             result.Add("TK", "TK")
             index += 2
         }
-    } else if containsAny(input, index, 2, []string{"DT", "DD"}) {
+    } else if contains(input, index, 2, "DT", "DD") {
         result.Add("T", "T")
         index += 2
     } else {
@@ -261,19 +256,19 @@ func handleG(input *String, result *metaphoneResult, index int, slavoGermanic bo
         result.Add("KL", "L")
         index += 2
     } else if index == 0 && (charAt(input, index + 1) == 'Y' ||
-        containsAny(input, index + 1, 2, []string{"ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER"})) {
+        contains(input, index + 1, 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER")) {
         result.Add("K", "J")
         index += 2
     } else if (contains(input, index + 1, 2, "ER") ||
       charAt(input, index + 1) == 'Y') &&
-      !containsAny(input, 0, 6, []string{"DANGER", "RANGER", "MANGER"}) &&
-      !containsAny(input, index - 1, 1, []string{"E", "I"}) &&
-      !containsAny(input, index - 1, 3, []string{"RGY", "OGY"}) {
+      !contains(input, 0, 6, "DANGER", "RANGER", "MANGER") &&
+      !contains(input, index - 1, 1, "E", "I") &&
+      !contains(input, index - 1, 3, "RGY", "OGY") {
       result.Add("K", "J")
       index += 2
-    } else if containsAny(input, index + 1, 1, []string{"E", "I", "Y"}) ||
-        containsAny(input, index - 1, 4, []string{"AGGI", "OGGI"}){
-          if containsAny(input, 0, 4, []string{"VAN ", "VON "}) ||
+    } else if contains(input, index + 1, 1, "E", "I", "Y") ||
+        contains(input, index - 1, 4, "AGGI", "OGGI"){
+          if contains(input, 0, 4, "VAN ", "VON ") ||
              contains(input, 0, 3, "SCH") ||
              contains(input, index + 1, 2, "ET") {
                 result.Add("K", "K")
@@ -304,13 +299,13 @@ func handleGH(input *String, result *metaphoneResult, index int) int {
             result.Add("K", "K")
         }
         index += 2
-    } else if (index > 1 && containsAny(input, index - 2, 1, []string{"B", "H", "D"})) || 
-              (index > 2 && containsAny(input, index - 3, 1, []string{"B", "H", "D"})) ||
-              (index > 3 && containsAny(input, index - 4, 1, []string{"B", "H"})) {
+    } else if (index > 1 && contains(input, index - 2, 1, "B", "H", "D")) || 
+              (index > 2 && contains(input, index - 3, 1, "B", "H", "D")) ||
+              (index > 3 && contains(input, index - 4, 1, "B", "H")) {
         index += 2
     } else {
         if index > 2 && charAt(input, index - 1) == 'U' &&
-           containsAny(input, index - 3, 1, []string{"C", "G", "L", "R", "T"}) {
+           contains(input, index - 3, 1, "C", "G", "L", "R", "T") {
             result.Add("F", "F")
         } else if index > 0 && charAt(input, index - 1) != 'I' {
             result.Add("K", "K")
@@ -348,9 +343,9 @@ func handleJ(input *String, result *metaphoneResult, index int, slavoGermanic bo
                 result.Add("J", "H")
         } else if index == (input.RuneCount() - 1) {
             result.Add("J", " ")
-        } else if !containsAny(input, index + 1, 1,
-          []string{"L", "T", "K", "S", "N", "M", "B", "Z"}) &&
-          !containsAny(input, index - 1, 1, []string{"S", "K", "L"}){
+        } else if !contains(input, index + 1, 1,
+          "L", "T", "K", "S", "N", "M", "B", "Z") &&
+          !contains(input, index - 1, 1, "S", "K", "L"){
             result.Add("J", "J")
         }
 
@@ -384,7 +379,7 @@ func handleP(input *String, result *metaphoneResult, index int) int {
         index += 2
     } else {
         result.Add("P", "P")
-        if containsAny(input, index + 1, 1, []string{"P", "B"}) {
+        if contains(input, index + 1, 1, "P", "B") {
             index += 2
         } else {
             index++
@@ -396,7 +391,7 @@ func handleP(input *String, result *metaphoneResult, index int) int {
 func handleR(input *String, result *metaphoneResult, index int, slavoGermanic bool) int {
     if index == (input.RuneCount() - 1) && !slavoGermanic &&
         contains(input, index - 2, 2, "IE") &&
-        !containsAny(input, index - 4, 2, []string{"ME", "MA"}) {
+        !contains(input, index - 4, 2, "ME", "MA") {
             result.Add("", "R")
     } else {
         result.Add("R", "R")
@@ -411,19 +406,19 @@ func handleR(input *String, result *metaphoneResult, index int, slavoGermanic bo
 }
 
 func handleS(input *String, result *metaphoneResult, index int, slavoGermanic bool) int {
-    if containsAny(input, index - 1, 3, []string{"ISL", "YSL"}) {
+    if contains(input, index - 1, 3, "ISL", "YSL") {
         index++
     } else if index == 0 && contains(input, index, 5, "SUGAR") {
         result.Add("X", "S")
         index++
     } else if contains(input, index, 2, "SH") {
-        if containsAny(input, index + 1, 4, []string{"HEIM", "HOEK", "HOLM", "HOLZ"}) {
+        if contains(input, index + 1, 4, "HEIM", "HOEK", "HOLM", "HOLZ") {
             result.Add("S", "S")
         } else {
             result.Add("X", "X")
         }
         index += 2
-    } else if containsAny(input, index, 3, []string{"SIO", "SIA"}) ||
+    } else if contains(input, index, 3, "SIO", "SIA") ||
         contains(input, index, 4, "SIAN") {
         if slavoGermanic {
             result.Add("S", "S")
@@ -431,7 +426,7 @@ func handleS(input *String, result *metaphoneResult, index int, slavoGermanic bo
             result.Add("S", "X")
         }
         index += 3
-    } else if (index == 0 && containsAny(input, index + 1, 1, []string{"M", "N", "L", "W"})) || 
+    } else if (index == 0 && contains(input, index + 1, 1, "M", "N", "L", "W")) || 
         contains(input, index + 1, 1, "Z") {
         result.Add("S", "X")
         if contains(input, index + 1, 1, "Z") {
@@ -443,13 +438,13 @@ func handleS(input *String, result *metaphoneResult, index int, slavoGermanic bo
         index = handleSC(input, result, index)
     } else {
         if index == input.RuneCount() - 1 &&
-            containsAny(input, index - 2, 2, []string{"AI", "OI"}) {
+            contains(input, index - 2, 2, "AI", "OI") {
             result.Add("", "S")
         } else {
             result.Add("S", "S")
         }
 
-        if containsAny(input, index + 1, 1, []string{"S", "Z"}) {
+        if contains(input, index + 1, 1, "S", "Z") {
             index += 2
         } else {
             index++
@@ -460,8 +455,8 @@ func handleS(input *String, result *metaphoneResult, index int, slavoGermanic bo
 
 func handleSC(input *String, result *metaphoneResult, index int) int {
     if charAt(input, index + 2) == 'H' {
-        if containsAny(input, index + 3, 2, []string{"OO", "ER", "EN", "UY", "ED", "EM"}) {
-            if containsAny(input, index + 3, 2, []string{"ER", "EN"}) {
+        if contains(input, index + 3, 2, "OO", "ER", "EN", "UY", "ED", "EM") {
+            if contains(input, index + 3, 2, "ER", "EN") {
                 result.Add("X", "SK")
             } else {
                 result.Add("SK", "SK")
@@ -473,7 +468,7 @@ func handleSC(input *String, result *metaphoneResult, index int) int {
                 result.Add("X", "X")
             }
         }
-    } else if containsAny(input, index + 2, 1, []string{"I", "E", "Y"}){
+    } else if contains(input, index + 2, 1, "I", "E", "Y"){
         result.Add("S", "S")
     } else {
         result.Add("SK", "SK")
@@ -487,12 +482,12 @@ func handleT(input *String, result *metaphoneResult, index int) int {
     if contains(input, index, 4, "TION") {
         result.Add("X", "X")
         index += 3
-    } else if containsAny(input, index, 3, []string{"TIA", "TCH"}) {
+    } else if contains(input, index, 3, "TIA", "TCH") {
         result.Add("X", "X")
         index += 3
     } else if contains(input, index, 2, "TH") || contains(input, index, 3, "TTH") {
-        if containsAny(input, index + 2, 2, []string{"OM", "AM"}) ||
-           containsAny(input, 0, 4, []string{"VAN ", "VON "}) ||
+        if contains(input, index + 2, 2, "OM", "AM") ||
+           contains(input, 0, 4, "VAN ", "VON ") ||
            contains(input, 0, 3, "SCH") {
             result.Add("T" ,"T")
         } else {
@@ -501,7 +496,7 @@ func handleT(input *String, result *metaphoneResult, index int) int {
         index += 2
     } else {
         result.Add("T" ,"T")
-        if containsAny(input, index + 1, 1, []string{"T", "D"}) {
+        if contains(input, index + 1, 1, "T", "D") {
             index += 2
         } else {
             index++
@@ -524,11 +519,11 @@ func handleW(input *String, result *metaphoneResult, index int) int {
             }
             index++
         } else if (index == input.RuneCount() - 1 && isVowel(charAt(input, index - 1))) || 
-        containsAny(input, index - 1, 5, []string{"EWSKI", "EWSKY", "OWSKI", "OWSKY"}) ||
+        contains(input, index - 1, 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY") ||
         contains(input, 0, 3, "SCH") {
             result.Add("", "F")
             index++
-        } else if containsAny(input, index, 4, []string{"WICZ", "WITZ"}) {
+        } else if contains(input, index, 4, "WICZ", "WITZ") {
             result.Add("TS", "FX")
             index += 4
         } else {
@@ -544,12 +539,12 @@ func handleX(input *String, result *metaphoneResult, index int) int {
         index++
     } else {
         if !((index == input.RuneCount() - 1) && 
-        (containsAny(input, index -3, 3, []string{"IAU", "EAU"}) ||
-        containsAny(input, index - 2, 2, []string{"AU", "OU"}))) {
+        (contains(input, index -3, 3, "IAU", "EAU") ||
+        contains(input, index - 2, 2, "AU", "OU"))) {
             result.Add("KS", "KS")
         }
 
-        if containsAny(input, index + 1, 1, []string{"C", "X"}) {
+        if contains(input, index + 1, 1, "C", "X") {
             index += 2
         } else {
             index++
@@ -562,7 +557,7 @@ func handleZ(input *String, result *metaphoneResult, index int, slavoGermanic bo
     if charAt(input, index + 1) == 'H' {
         result.Add("J", "J")
     } else {
-        if containsAny(input, index + 1, 2, []string{"ZO", "ZI", "ZA"}) ||
+        if contains(input, index + 1, 2, "ZO", "ZI", "ZA") ||
         (slavoGermanic && (index > 0 && charAt(input, index - 1) != 'T')) {
             result.Add("S", "TS")
         } else {
@@ -601,8 +596,8 @@ func conditionC0(input *String, index int) bool {
 func conditionCH0(input *String, index int) bool {
     if index != 0 {
         return false
-    } else if !containsAny(input, index + 1, 5, []string{"HARAC", "HARIS"}) &&
-        !containsAny(input, index + 1, 3, []string{"HOR", "HYM", "HIA", "HEM"}) {
+    } else if !contains(input, index + 1, 5, "HARAC", "HARIS") &&
+        !contains(input, index + 1, 3, "HOR", "HYM", "HIA", "HEM") {
             return false
     } else if contains(input, 0, 5, "CHORE") {
         return false
@@ -613,19 +608,20 @@ func conditionCH0(input *String, index int) bool {
 
 func conditionCH1(input *String, index int) bool {
     // good god this is ugly
-    return (containsAny(input, 0, 4, []string{"VAN ", "VON "}) || contains(input, 0, 3, "SCH")) ||
-    containsAny(input, index - 2, 6, []string{"ORCHES", "ARCHIT", "ORCHID"}) ||
-    containsAny(input, index + 2, 1, []string{"T", "S"}) ||
-    ((containsAny(input, index - 1, 1, []string{"A", "O", "U", "E"}) || index == 0) &&
-     (containsAny(input, index + 2, 1, []string{"L", "R", "N", "M", "B", "H", "F", "V", "W", " "}) || index + 1 == input.RuneCount() - 1))
+    return (contains(input, 0, 4, "VAN ", "VON ") || contains(input, 0, 3, "SCH")) ||
+    contains(input, index - 2, 6, "ORCHES", "ARCHIT", "ORCHID") ||
+    contains(input, index + 2, 1, "T", "S") ||
+    ((contains(input, index - 1, 1, "A", "O", "U", "E") || index == 0) &&
+     (contains(input, index + 2, 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ") ||
+     index + 1 == input.RuneCount() - 1))
 }
 
 func conditionL0(input *String, index int) bool {
     if index == (input.RuneCount() - 3) &&
-       containsAny(input, index - 1, 4, []string{"ILLO", "ILLA", "ALLE"}) {
+       contains(input, index - 1, 4, "ILLO", "ILLA", "ALLE") {
         return true
-    } else if (containsAny(input, input.RuneCount() - 2, 2, []string{"AS", "OS"}) ||
-      containsAny(input, input.RuneCount() - 1, 1, []string{"A", "O"})) &&
+    } else if (contains(input, input.RuneCount() - 2, 2, "AS", "OS") ||
+      contains(input, input.RuneCount() - 1, 1, "A", "O")) &&
       (contains(input, index - 1, 4, "ALLE")) {
         return true
     } else {
