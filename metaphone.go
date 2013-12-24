@@ -366,7 +366,7 @@ func handleJ(input *String, result *metaphoneResult, index int, slavoGermanic bo
 func handleL(input *String, result *metaphoneResult, index int) int {
     if charAt(input, index + 1) == 'L' {
         if conditionL0(input, index) {
-            result.Add("L", "L")
+            result.Add("L", "")
         } else {
             result.Add("L", "L")
         }
@@ -721,7 +721,7 @@ func DoubleMetaphone(s1 string) (string, string){
         case 'P':
             index = handleP(input, result, index)
         case 'Q':
-            result.Add("K", "Q")
+            result.Add("K", "K")
             if charAt(input, index + 1) == 'Q' {
                 index += 2
             } else {
