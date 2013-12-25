@@ -10,16 +10,17 @@ func Soundex(s1 string) (string){
     // we should work with all uppercase
     s1 = strings.ToUpper(s1)
 
-    // the encoded value
-    enc := s1[0:1]
+    input := NewString(s1)
 
-    i := 0
+    // the encoded value
+    enc := input.Slice(0,1)
+
     c := ""
     prev := ""
     hw := false
 
-    for _, v := range(s1) {
-        switch v {
+    for i := 0; i < input.RuneCount(); i++ {
+        switch rune(input.At(i)) {
         case 'B', 'F', 'P', 'V':
             c = "1"
         case 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
@@ -56,7 +57,6 @@ func Soundex(s1 string) (string){
 
         prev = c
         hw = false
-        i++
     }
 
     // if we've fallen short of 4 "real" encoded characters,
