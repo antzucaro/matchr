@@ -87,32 +87,6 @@ func cleanInput(input string) string {
     return strings.ToUpper(strings.TrimSpace(input))
 }
 
-func charAt(value *String, index int) rune {
-    if index < 0 || index >= value.RuneCount() {
-        return 0
-    } else {
-        return rune(value.At(index))
-    }
-}
-
-func contains(value *String, start int, length int, criteria ...string) bool {
-    substring := substring(value, start, length)
-    for _, c := range(criteria) {
-        if substring == c {
-            return true
-        }
-    }
-    return false
-}
-
-func substring(value *String, start int, length int) string {
-    if start >= 0 && start + length <= value.RuneCount() {
-        return value.Slice(start, start + length)
-    } else {
-        return ""
-    }
-}
-
 func handleVowel(result *metaphoneResult, index int) int {
     if index == 0 {
         result.Add("A", "A")

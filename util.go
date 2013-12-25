@@ -48,3 +48,36 @@ func Round(x float64, prec int) float64 {
 
 	return rounder / pow * sign
 }
+
+// A fault-tolerant version of At. It will return nothing (0) if the index is
+// out of bounds. This helps to index characters without having to bound check
+// everywhere.
+func charAt(value *String, index int) rune {
+    if index < 0 || index >= value.RuneCount() {
+        return 0
+    } else {
+        return rune(value.At(index))
+    }
+}
+
+// A helper to determine if any substrings exist within the given string
+func contains(value *String, start int, length int, criteria ...string) bool {
+    substring := substring(value, start, length)
+    for _, c := range(criteria) {
+        if substring == c {
+            return true
+        }
+    }
+    return false
+}
+
+// A fault-tolerant version of Slice. It will return nothing ("") if the index
+// is out of bounds. This allows substring-ing without having to bound check
+// every time.
+func substring(value *String, start int, length int) string {
+    if start >= 0 && start + length <= value.RuneCount() {
+        return value.Slice(start, start + length)
+    } else {
+        return ""
+    }
+}
