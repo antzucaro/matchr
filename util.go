@@ -1,6 +1,9 @@
 package matchr
 
-import "math"
+import (
+    "math"
+    "strings"
+)
 
 // min of two integers
 func min(a int, b int) (res int) {
@@ -81,3 +84,17 @@ func substring(value *String, start int, length int) string {
         return ""
     }
 }
+
+func isVowel(c rune) bool {
+    switch c {
+    case 'A', 'E', 'I', 'O', 'U', 'Y':
+        return true
+    default:
+        return false
+    }
+}
+
+func cleanInput(input string) string {
+    return strings.ToUpper(strings.TrimSpace(input))
+}
+

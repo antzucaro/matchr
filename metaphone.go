@@ -60,15 +60,6 @@ func isSlavoGermanic(value string) bool {
            strings.Contains(value, "CZ") || strings.Contains(value, "WITZ")
 }
 
-func isVowel(c rune) bool {
-    switch c {
-    case 'A', 'E', 'I', 'O', 'U', 'Y':
-        return true
-    default:
-        return false
-    }
-}
-
 func isSilentStart(input *String) bool {
     SILENT_START := [...]string{"GN", "KN", "PN", "WR", "PS"}
 
@@ -81,10 +72,6 @@ func isSilentStart(input *String) bool {
     }
 
     return false
-}
-
-func cleanInput(input string) string {
-    return strings.ToUpper(strings.TrimSpace(input))
 }
 
 func handleVowel(result *metaphoneResult, index int) int {
