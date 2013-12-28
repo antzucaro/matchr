@@ -61,7 +61,7 @@ func Soundex(s1 string) (string){
 
     // if we've fallen short of 4 "real" encoded characters,
     // it gets padded with zeros
-    for i := len(enc); i < 4; i++ {
+    for len(enc) < 4 {
         enc = enc + "0"
     }
 
