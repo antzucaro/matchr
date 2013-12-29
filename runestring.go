@@ -5,7 +5,7 @@ type runestring []rune
 // A safe way to index a runestring. It will return a null rune if you try
 // to index outside of the bounds of the runestring.
 func (r *runestring) SafeAt(pos int) rune {
-	if pos < 0 || pos > len(*r) {
+	if pos < 0 || pos >= len(*r) {
 		return 0
 	} else {
 		return (*r)[pos]
