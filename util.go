@@ -94,6 +94,15 @@ func isVowel(c rune) bool {
     }
 }
 
+func isVowelNoY(c rune) bool {
+    switch c {
+    case 'A', 'E', 'I', 'O', 'U':
+        return true
+    default:
+        return false
+    }
+}
+
 func cleanInput(input string) string {
     return strings.ToUpper(strings.TrimSpace(input))
 }
