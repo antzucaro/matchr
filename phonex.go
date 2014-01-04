@@ -1,31 +1,7 @@
 package matchr
 
-import "bytes"
-
-type phonexResult struct {
-    result bytes.Buffer
-    length int
-    last string
-}
-
-func (r *phonexResult) Add(c string) {
-    if c != r.last || c == "0" {
-        r.result.WriteString(c)
-        r.length += len(c)
-        r.last = c
-    }
-}
-
-func (r *phonexResult) Length() int {
-    return r.length
-}
-
-func (r *phonexResult) String() string {
-    return r.result.String()
-}
-
 func preProcess(input []rune) ([]rune) {
-    output := make([]rune, 0, len(input))
+    output := runestring(make([]rune, 0, len(input)))
 
     // 0. Remove all non-ASCII characters
     for  _, v := range(input) {
@@ -35,26 +11,28 @@ func preProcess(input []rune) ([]rune) {
     }
 
     // 1. Remove all trailing 'S' characters at the end of the name
-    if output[len(output)-1] == 'S' {
-        output = append(output[:len(output)-1], output[len(output):]...)
+    for i := len(output) - 1; output[i] == 'S'; i-- {
+        output[i] = 0
     }
 
     // 2. Convert leading letter pairs as follows
     //    KN -> N, PH -> F, WR -> R
-    if len(output) > 1 {
-        switch string(output[0:2]) {
-        case "KN":
-            output = append(output[:0], output[1:]...)
-        case "PH":
-            output = append(output[:0], output[1:]...)
-            output[0] = 'F'
-        case "WR":
-            output = append(output[:0], output[1:]...)
-        }
+    switch output.SafeSubstr(0, 2) {
+    case "KN":
+        output.Del(0)
+    case "PH":
+        output[0] = 'F' // H will be ignored anyway
+    case "WR":
+        output.Del(0)
     }
 
-    // 3. Convert leading single letters as follows:
+    // 3a. Convert leading single letters as follows:
     //    H         -> Remove
+    if output.SafeAt(0) == 'H' {
+        output.Del(0)
+    }
+
+    // 3a. Convert leading single letters as follows:
     //    E,I,O,U,Y -> A
     //    P         -> B
     //    V         -> F
@@ -62,8 +40,6 @@ func preProcess(input []rune) ([]rune) {
     //    J         -> G
     //    Z         -> S
     switch output[0] {
-    case 'H':
-        output = append(output[:0], output[1:]...)
     case 'E', 'I', 'O', 'U', 'Y':
         output[0] = 'A'
     case 'P':
@@ -89,62 +65,62 @@ func Phonex(s1 string) (string){
     // preprocess
     s1 = cleanInput(s1)
 
-    // convert to a slice of character code points for easy indexing
-    input := preProcess([]rune(s1))
+    input := runestring(preProcess([]rune(s1)))
 
-    result := phonexResult{}
+    result := make([]rune, 0, len(input))
 
-    // keep the first letter
-    if len(input) > 0 {
-        result.Add(string(input[0]))
-    }
-
-    index := 1
-    for result.Length() < 4 && index < len(input) {
-
-        switch input[index] {
-        case 'A', 'E', 'H', 'I', 'O', 'U', 'W', 'Y':
-            index++
-        case 'B', 'F', 'P', 'V':
-            result.Add("1")
-            index++
-        case 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
-            result.Add("2")
-            index++
+    last := rune(0)
+    code := rune(0)
+    for i := 0;
+        i < len(input) &&
+        input[i] != ' ' &&
+        input[i] != ',' &&
+        len(result) < 4;
+        i++ {
+        switch input[i] {
+        case 'B', 'P', 'F', 'V':
+            code = '1'
+        case 'C', 'S', 'K', 'G', 'J', 'Q', 'X', 'Z':
+            code = '2'
         case 'D', 'T':
-            if index == len(input) - 1 || (index + 1 < len(input) &&
-               input[index + 1] != 'C') {
-                result.Add("3")
+            if input.SafeAt(i+1) != 'C' {
+                code = '3'
             }
-            index++
         case 'L':
-            if index + 1 < len(input) && !isVowel(input[index + 1]) && 
-               index != (len(input) - 1) {
-                result.Add("4")
+            if isVowel(input.SafeAt(i+1)) || i == len(input) - 1 {
+                code = '4'
             }
-            index++
         case 'M', 'N':
-            result.Add("5")
-            if index + 1 < len(input) &&
-               (input[index + 1] == 'D' || input[index + 1] == 'G') {
-                index += 2
-            } else {
-                index++
+            nextChar := input.SafeAt(i+1)
+            if nextChar == 'D' || nextChar == 'G' {
+                // ignore next character
+                i++
             }
+            code = '5'
         case 'R':
-            if index + 1 < len(input) &&
-               (!isVowel(input[index + 1]) && index != (len(input) - 1)){
-                result.Add("6")
+            if isVowel(input.SafeAt(i+1)) || i == len(input) - 1 {
+                code = '6'
             }
-            index++
         default:
-            index++
+            code = 0
+        }
+
+        if last != code && code != 0 && i != 0 {
+            result = append(result, code)
+        }
+
+        // special case for 1st character: we use the actual character
+        if i == 0 {
+            result = append(result, input[i])
+            last = code
+        } else {
+            last = result[len(result)-1]
         }
     }
 
-    for result.Length() < 4 {
-        result.Add("0")
+    for len(result) < 4 {
+        result = append(result, '0')
     }
 
-    return result.String()
+    return string(result)
 }
