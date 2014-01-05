@@ -14,6 +14,8 @@ var hamtests = []struct {
 	{"tar", "car", 1, false},
 	{"xyz", "zyx", 2, false},
 	{"wxyz", "zyx", 0, true},
+    {"Schüßler", "Schübler", 1, false},
+    {"Schüßler", "Schußler", 1, false},
 }
 
 // Hamming Distance
