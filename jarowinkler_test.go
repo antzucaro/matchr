@@ -13,6 +13,7 @@ var jarotests = []struct {
 	{"dixon", "dicksonx", 0.7666666666666666},
 	{"martha", "marhta", 0.9444444444444445},
 	{"dwayne", "duane", 0.8222222222222223},
+	{"martüa", "marüta", 0.9444444444444445},
 }
 
 // Regular Jaro distance

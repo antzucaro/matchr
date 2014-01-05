@@ -17,7 +17,7 @@ func min(a int, b int) (res int) {
 }
 
 // is this string index outside of the ASCII numeric code points?
-func NaN(c uint8) bool {
+func NaN(c rune) bool {
 	return ((c > 57) || (c < 48))
 }
 
