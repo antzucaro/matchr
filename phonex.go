@@ -19,17 +19,17 @@ func preProcess(input []rune) ([]rune) {
     //    KN -> N, PH -> F, WR -> R
     switch output.SafeSubstr(0, 2) {
     case "KN":
-        output.Del(0)
+        output = output[1:]
     case "PH":
         output[0] = 'F' // H will be ignored anyway
     case "WR":
-        output.Del(0)
+        output = output[1:]
     }
 
     // 3a. Convert leading single letters as follows:
     //    H         -> Remove
     if output.SafeAt(0) == 'H' {
-        output.Del(0)
+        output = output[1:]
     }
 
     // 3a. Convert leading single letters as follows:
