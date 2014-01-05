@@ -1,10 +1,12 @@
 package matchr
 
 func DamerauLevenshtein(s1 string, s2 string) (distance int) {
-    s1Len := len(s1)
-    s2Len := len(s2)
-    rows := s1Len + 1
-    cols := s2Len + 1
+    // index by code point, not byte
+    r1 := []rune(s1)
+    r2 := []rune(s2)
+
+    rows := len(r1) + 1
+    cols := len(r2) + 1
 
     var i, j, d1, d2, d3, d_now, cost int
 
@@ -20,7 +22,7 @@ func DamerauLevenshtein(s1 string, s2 string) (distance int) {
 
     for i = 1; i < rows; i++ {
         for j = 1; j < cols; j++ {
-            if (s1[i - 1] == s2[j - 1]) {
+            if (r1[i - 1] == r2[j - 1]) {
                 cost = 0
             } else {
                 cost = 1
@@ -32,8 +34,8 @@ func DamerauLevenshtein(s1 string, s2 string) (distance int) {
 
             d_now = min(d1, min(d2, d3))
 
-            if i > 2 && j > 2 && s1[i - 1] == s2[j - 2] &&
-                s1[i - 2] == s2[j - 1] {
+            if i > 2 && j > 2 && r1[i - 1] == r2[j - 2] &&
+                r1[i - 2] == r2[j - 1] {
                 d1 = dist[((i - 2) * cols) + (j - 2)] + cost
                 d_now = min(d_now, d1)
             }
