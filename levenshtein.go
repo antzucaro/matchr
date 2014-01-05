@@ -1,11 +1,12 @@
 package matchr
 
 func Levenshtein(s1 string, s2 string) (distance int) {
-    s1Len := len(s1)
-    s2Len := len(s2)
+    // index by code point, not byte
+    r1 := []rune(s1)
+    r2 := []rune(s2)
 
-    rows := s1Len + 1
-    cols := s2Len + 1
+    rows := len(r1) + 1
+    cols := len(r2) + 1
 
     var d1 int
     var d2 int
@@ -24,7 +25,7 @@ func Levenshtein(s1 string, s2 string) (distance int) {
 
     for j = 1; j < cols; j++ {
         for i = 1; i < rows; i++ {
-            if (s1[i - 1] == s2[j - 1]) {
+            if (r1[i - 1] == r2[j - 1]) {
                 dist[(i * cols) + j] = dist[((i - 1) * cols) + (j - 1)]
             } else {
                 d1 = dist[((i - 1) * cols) + j] + 1

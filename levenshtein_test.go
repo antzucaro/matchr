@@ -7,18 +7,24 @@ var levtests = []struct {
         s2    string
         dist  int
 }{
-        // insertion
-        {"car", "cars", 1},
-        // substitution
-        {"library", "librari", 1},
-        // deletion
-        {"library", "librar", 1},
-        // one empty, left
-        {"", "library", 7},
-        // one empty, right
-        {"library", "", 7},
-        // two empties
-        {"", "", 0},
+    // insertion
+    {"car", "cars", 1},
+    // substitution
+    {"library", "librari", 1},
+    // deletion
+    {"library", "librar", 1},
+    // one empty, left
+    {"", "library", 7},
+    // one empty, right
+    {"library", "", 7},
+    // two empties
+    {"", "", 0},
+    // unicode stuff!
+    {"Schüßler", "Schübler", 1},
+    {"Schüßler", "Schußler", 1},
+    {"Schüßler", "Schüßler", 0},
+    {"Schüßler", "Schüler", 1},
+    {"Schüßler", "Schüßlers", 1},
 }
 
 
