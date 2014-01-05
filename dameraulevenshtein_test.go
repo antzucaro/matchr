@@ -25,7 +25,7 @@ var damlevtests = []struct {
 
 // Damerau Levenshtein
 func TestDamerauLevenshtein(t *testing.T) {
-	for _, tt := range levtests {
+	for _, tt := range damlevtests {
 		dist := DamerauLevenshtein(tt.s1, tt.s2)
 		if dist != tt.dist {
 			t.Errorf("DamerauLevenshtein('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
