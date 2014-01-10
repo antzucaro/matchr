@@ -62,6 +62,9 @@ var phonextests = []struct {
     {"Kuickening" , "C250"},
     {"Joben" , "G150"},
     {"Zelda" , "S300"},
+    {"S" , "0000"},
+    {"H" , "0000"},
+    {"" , "0000"},
 }
 
 // phonex

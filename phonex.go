@@ -11,8 +11,8 @@ func preProcess(input []rune) ([]rune) {
     }
 
     // 1. Remove all trailing 'S' characters at the end of the name
-    for i := len(output) - 1; output[i] == 'S'; i-- {
-        output[i] = 0
+    for i := len(output) - 1; i >=0 && output[i] == 'S'; i-- {
+        output.Del(i)
     }
 
     // 2. Convert leading letter pairs as follows
@@ -39,7 +39,7 @@ func preProcess(input []rune) ([]rune) {
     //    K,Q       -> C
     //    J         -> G
     //    Z         -> S
-    switch output[0] {
+    switch output.SafeAt(0) {
     case 'E', 'I', 'O', 'U', 'Y':
         output[0] = 'A'
     case 'P':
@@ -58,9 +58,6 @@ func preProcess(input []rune) ([]rune) {
 }
 
 func Phonex(s1 string) (string){
-    if len(s1) == 0 {
-        return ""
-    }
 
     // preprocess
     s1 = cleanInput(s1)
