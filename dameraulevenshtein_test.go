@@ -28,6 +28,8 @@ var damlevtests = []struct {
     {"Schßüler", "Schüßler", 1},
     {"Schüßler", "Schüler", 1},
     {"Schüßler", "Schüßlers", 1},
+	// difference between DL and OSA
+	{"ca", "abc", 2},
 }
 
 // Damerau Levenshtein
