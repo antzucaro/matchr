@@ -1,5 +1,10 @@
 package matchr
 
+// DamerauLevenshtein computes the Damerau-Levenshtein distance between two
+// strings. The returned value - distance - is the number of insertions,
+// deletions, substitutions, and transpositions it takes to transform one 
+// string (s1) into another (s2). Each step in the transformation "costs"
+// one distance point.
 func DamerauLevenshtein(s1 string, s2 string) (distance int) {
     // index by code point, not byte
     r1 := []rune(s1)
