@@ -1,11 +1,12 @@
 package matchr
 
-// DamerauLevenshtein computes the Damerau-Levenshtein distance between two
+// OSA computes the Optimal String Alignment distance between two
 // strings. The returned value - distance - is the number of insertions,
 // deletions, substitutions, and transpositions it takes to transform one 
 // string (s1) into another (s2). Each step in the transformation "costs"
-// one distance point.
-func DamerauLevenshtein(s1 string, s2 string) (distance int) {
+// one distance point. It is similar to Damerau-Levenshtein, but is simpler
+// because it does not allow multiple edits on any substring.
+func OSA(s1 string, s2 string) (distance int) {
     // index by code point, not byte
     r1 := []rune(s1)
     r2 := []rune(s2)

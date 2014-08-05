@@ -2,7 +2,7 @@ package matchr
 
 import "testing"
 
-var damlevtests = []struct {
+var osatests = []struct {
 	s1   string
 	s2   string
 	dist int
@@ -28,16 +28,16 @@ var damlevtests = []struct {
     {"Schßüler", "Schüßler", 1},
     {"Schüßler", "Schüler", 1},
     {"Schüßler", "Schüßlers", 1},
-	// difference between DL and OSA
-	{"ca", "abc", 2},
+	// difference between DL and OSA. This is OSA, so it should be 3.
+	{"ca", "abc", 3},
 }
 
-// Damerau Levenshtein
-func TestDamerauLevenshtein(t *testing.T) {
-	for _, tt := range damlevtests {
-		dist := DamerauLevenshtein(tt.s1, tt.s2)
+// OSA (Optimal String Alignment)
+func TestOSA(t *testing.T) {
+	for _, tt := range osatests {
+		dist := OSA(tt.s1, tt.s2)
 		if dist != tt.dist {
-			t.Errorf("DamerauLevenshtein('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
+			t.Errorf("OSA('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
 		}
 	}
 }
