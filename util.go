@@ -16,6 +16,17 @@ func min(a int, b int) (res int) {
     return
 }
 
+// max of two integers
+func maxI(a int, b int) (res int) {
+    if a < b {
+        res = b
+    } else {
+        res = a
+    }
+
+    return
+}
+
 // max of two float64s
 func max(a float64, b float64) (res float64) {
     if a < b {
