@@ -6,7 +6,7 @@ var hamtests = []struct {
 	s1   string
 	s2   string
 	dist int
-    err  bool
+	err  bool
 }{
 	{"", "", 0, false},
 	{"cat", "cat", 0, false},
@@ -14,8 +14,8 @@ var hamtests = []struct {
 	{"tar", "car", 1, false},
 	{"xyz", "zyx", 2, false},
 	{"wxyz", "zyx", 0, true},
-    {"Schüßler", "Schübler", 1, false},
-    {"Schüßler", "Schußler", 1, false},
+	{"Schüßler", "Schübler", 1, false},
+	{"Schüßler", "Schußler", 1, false},
 }
 
 // Hamming Distance
@@ -26,8 +26,8 @@ func TestHamming(t *testing.T) {
 			t.Errorf("Hamming('%s', '%s') = %v, want %v", tt.s1, tt.s2, dist, tt.dist)
 		}
 
-        if tt.err && err == nil {
+		if tt.err && err == nil {
 			t.Errorf("Hamming('%s', '%s') should throw an error", tt.s1, tt.s2)
-        }
+		}
 	}
 }

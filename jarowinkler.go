@@ -3,9 +3,9 @@ package matchr
 func jaroWinklerBase(s1 string, s2 string,
 	longTolerance bool, winklerize bool) (distance float64) {
 
-    // index by code point, not byte
-    r1 := []rune(s1)
-    r2 := []rune(s2)
+	// index by code point, not byte
+	r1 := []rune(s1)
+	r2 := []rune(s2)
 
 	r1Length := len(r1)
 	r2Length := len(r2)

@@ -5,8 +5,8 @@
 package matchr
 
 import (
-    "errors"
-    "unicode/utf8"
+	"errors"
+	"unicode/utf8"
 )
 
 // String wraps a regular string with a small structure that provides more

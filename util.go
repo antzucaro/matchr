@@ -1,43 +1,42 @@
 package matchr
 
 import (
-    "math"
-    "strings"
+	"math"
+	"strings"
 )
 
 // min of two integers
 func min(a int, b int) (res int) {
-    if a < b {
-        res = a
-    } else {
-        res = b
-    }
+	if a < b {
+		res = a
+	} else {
+		res = b
+	}
 
-    return
+	return
 }
 
 // max of two integers
 func maxI(a int, b int) (res int) {
-    if a < b {
-        res = b
-    } else {
-        res = a
-    }
+	if a < b {
+		res = b
+	} else {
+		res = a
+	}
 
-    return
+	return
 }
 
 // max of two float64s
 func max(a float64, b float64) (res float64) {
-    if a < b {
-        res = b
-    } else {
-        res = a
-    }
+	if a < b {
+		res = b
+	} else {
+		res = a
+	}
 
-    return
+	return
 }
-
 
 // is this string index outside of the ASCII numeric code points?
 func NaN(c rune) bool {
@@ -48,7 +47,7 @@ func NaN(c rune) bool {
 //
 // http://play.golang.org/p/S654PxAe_N
 //
-// (via Rory McGuire at 
+// (via Rory McGuire at
 // https://groups.google.com/forum/#!topic/golang-nuts/ITZV08gAugI)
 func Round(x float64, prec int) float64 {
 	if math.IsNaN(x) || math.IsInf(x, 0) {
@@ -79,54 +78,53 @@ func Round(x float64, prec int) float64 {
 // out of bounds. This helps to index characters without having to bound check
 // everywhere.
 func charAt(value *String, index int) rune {
-    if index < 0 || index >= value.RuneCount() {
-        return 0
-    } else {
-        return rune(value.At(index))
-    }
+	if index < 0 || index >= value.RuneCount() {
+		return 0
+	} else {
+		return rune(value.At(index))
+	}
 }
 
 // A helper to determine if any substrings exist within the given string
 func contains(value *String, start int, length int, criteria ...string) bool {
-    substring := substring(value, start, length)
-    for _, c := range(criteria) {
-        if substring == c {
-            return true
-        }
-    }
-    return false
+	substring := substring(value, start, length)
+	for _, c := range criteria {
+		if substring == c {
+			return true
+		}
+	}
+	return false
 }
 
 // A fault-tolerant version of Slice. It will return nothing ("") if the index
 // is out of bounds. This allows substring-ing without having to bound check
 // every time.
 func substring(value *String, start int, length int) string {
-    if start >= 0 && start + length <= value.RuneCount() {
-        return value.Slice(start, start + length)
-    } else {
-        return ""
-    }
+	if start >= 0 && start+length <= value.RuneCount() {
+		return value.Slice(start, start+length)
+	} else {
+		return ""
+	}
 }
 
 func isVowel(c rune) bool {
-    switch c {
-    case 'A', 'E', 'I', 'O', 'U', 'Y':
-        return true
-    default:
-        return false
-    }
+	switch c {
+	case 'A', 'E', 'I', 'O', 'U', 'Y':
+		return true
+	default:
+		return false
+	}
 }
 
 func isVowelNoY(c rune) bool {
-    switch c {
-    case 'A', 'E', 'I', 'O', 'U':
-        return true
-    default:
-        return false
-    }
+	switch c {
+	case 'A', 'E', 'I', 'O', 'U':
+		return true
+	default:
+		return false
+	}
 }
 
 func cleanInput(input string) string {
-    return strings.ToUpper(strings.TrimSpace(input))
+	return strings.ToUpper(strings.TrimSpace(input))
 }
-

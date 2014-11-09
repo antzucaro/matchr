@@ -21,13 +21,13 @@ var swtests = []struct {
 	{"library", "", 7.0},
 	// two empties
 	{"", "", 0.0},
-    // unicode stuff!
-    {"Schüßler", "Schübler", 6.0},
-    {"Ant Zucaro", "Anthony Zucaro", 8.0},
-    {"Schüßler", "Schüßler", 8.0},
-    {"Schßüler", "Schüßler", 6.0},
-    {"Schüßler", "Schüler", 6.5},
-    {"Schüßler", "Schüßlers", 8.0},
+	// unicode stuff!
+	{"Schüßler", "Schübler", 6.0},
+	{"Ant Zucaro", "Anthony Zucaro", 8.0},
+	{"Schüßler", "Schüßler", 8.0},
+	{"Schßüler", "Schüßler", 6.0},
+	{"Schüßler", "Schüler", 6.5},
+	{"Schüßler", "Schüßlers", 8.0},
 }
 
 // Smith-Waterman
