@@ -97,7 +97,7 @@ func jaroWinklerBase(s1 string, s2 string,
 			j = minLength
 		}
 
-		for i = 0; i < j && r1[i] == r2[i] && NaN(r1[i]); i++ {
+		for i = 0; i < j && r1[i] == r2[i] && nan(r1[i]); i++ {
 		}
 
 		if i > 0 {
@@ -106,7 +106,7 @@ func jaroWinklerBase(s1 string, s2 string,
 
 		if longTolerance && (minLength > 4) && (commonChars > i+1) &&
 			(2*commonChars >= minLength+i) {
-			if NaN(r1[0]) {
+			if nan(r1[0]) {
 				distance += (1.0 - distance) * (float64(commonChars-i-1) /
 					(float64(r1Length) + float64(r2Length) - float64(i*2) + 2))
 			}
