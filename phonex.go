@@ -57,6 +57,13 @@ func preProcess(input []rune) []rune {
 	return output
 }
 
+// Phonex computes the Phonex phonetic encoding of the input string. Phonex is
+// a modification of the venerable Soundex algorithm. It accounts for a few
+// more letter combinations to improve accuracy on some data sets.
+//
+// This implementation is based off of the original C implementation by the
+// creator - A. J. Lait - as found in his research paper entitled "An
+// Assessment of Name Matching Algorithms."
 func Phonex(s1 string) string {
 
 	// preprocess
