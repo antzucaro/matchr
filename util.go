@@ -49,7 +49,7 @@ func nan(c rune) bool {
 //
 // (via Rory McGuire at
 // https://groups.google.com/forum/#!topic/golang-nuts/ITZV08gAugI)
-func Round(x float64, prec int) float64 {
+func round(x float64, prec int) float64 {
 	if math.IsNaN(x) || math.IsInf(x, 0) {
 		return x
 	}
