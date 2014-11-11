@@ -116,10 +116,20 @@ func jaroWinklerBase(s1 string, s2 string,
 	return
 }
 
+// Jaro computes the Jaro edit distance between two strings. It represents
+// this with a float64 between 0 and 1 inclusive, with 0 indicating the two
+// strings are not at all similar and 1 indicating the two strings are exact
+// matches.
+//
+// See http://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance for a
+// full description.
 func Jaro(r1 string, r2 string) (distance float64) {
 	return jaroWinklerBase(r1, r2, false, false)
 }
 
+// JaroWinkler computes the Jaro-Winkler edit distance between two strings.
+// This is a modification of the Jaro algorithm that gives additional weight
+// to prefix matches.
 func JaroWinkler(r1 string, r2 string, longTolerance bool) (distance float64) {
 	return jaroWinklerBase(r1, r2, longTolerance, true)
 }
