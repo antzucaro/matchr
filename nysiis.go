@@ -1,5 +1,7 @@
 package matchr
 
+// NYSIIS computes the NYSIIS phonetic encoding of the input string. It is a
+// modification of the traditional Soundex algorithm.
 func NYSIIS(s1 string) string {
 	if len(s1) == 0 {
 		return ""
