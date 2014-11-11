@@ -7,7 +7,7 @@ package matchr
 // one distance point. It is similar to the Optimal String Alignment,
 // algorithm, but is more complex because it allows multiple edits on
 // substrings.
-
+//
 // This implementation is based off of the one found on Wikipedia at
 // http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Distance_with_adjacent_transpositions
 // as well as KevinStern's Java implementation found at
