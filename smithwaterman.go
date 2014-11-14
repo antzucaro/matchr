@@ -10,6 +10,9 @@ func getCost(r1 []rune, r1Index int, r2 []rune, r2Index int) float64 {
 	}
 }
 
+// SmithWaterman computes the Smith-Waterman local sequence alignment for the
+// two input strings. This was originally designed to find similar regions in
+// strings representing DNA or protein sequences.
 func SmithWaterman(s1 string, s2 string) float64 {
 	var cost float64
 
