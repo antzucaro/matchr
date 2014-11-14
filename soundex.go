@@ -2,6 +2,9 @@ package matchr
 
 import "strings"
 
+// Soundex computes the Soundex phonetic representation of the input string. It
+// attempts to encode homophones with the same characters. More information can
+// be found at http://en.wikipedia.org/wiki/Soundex.
 func Soundex(s1 string) string {
 	if len(s1) == 0 {
 		return ""
