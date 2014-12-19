@@ -60,10 +60,10 @@ func isSlavoGermanic(value string) bool {
 		strings.Contains(value, "CZ") || strings.Contains(value, "WITZ")
 }
 
-func isSilentStart(input *String) bool {
+func isSilentStart(input runestring) bool {
 	SILENT_START := [...]string{"GN", "KN", "PN", "WR", "PS"}
 
-	prefix := substring(input, 0, 2)
+	prefix := input.SafeSubstr(0, 2)
 
 	for _, criteria := range SILENT_START {
 		if prefix == criteria {
@@ -85,36 +85,36 @@ func handleVowel(result *metaphoneresult, index int) int {
 /******************************************************************************
  * Entry handlers for letters.
  *****************************************************************************/
-func handleC(input *String, result *metaphoneresult, index int) int {
+func handleC(input runestring, result *metaphoneresult, index int) int {
 	if conditionC0(input, index) {
 		result.add("K", "K")
 		index += 2
-	} else if index == 0 && contains(input, index, 6, "CAESAR") {
+	} else if index == 0 && input.Contains(index, 6, "CAESAR") {
 		result.add("S", "S")
 		index += 2
-	} else if contains(input, index, 2, "CH") {
+	} else if input.Contains(index, 2, "CH") {
 		index = handleCH(input, result, index)
-	} else if contains(input, index, 2, "CZ") &&
-		!contains(input, index-2, 4, "WICZ") {
+	} else if input.Contains(index, 2, "CZ") &&
+		!input.Contains(index-2, 4, "WICZ") {
 		result.add("S", "X")
 		index += 2
-	} else if contains(input, index+1, 3, "CIA") {
+	} else if input.Contains(index+1, 3, "CIA") {
 		result.add("X", "X")
 		index += 3
-	} else if contains(input, index, 2, "CC") &&
-		!(index == 1 && charAt(input, 0) == 'M') {
+	} else if input.Contains(index, 2, "CC") &&
+		!(index == 1 && input.SafeAt(0) == 'M') {
 		return handleCC(input, result, index)
-	} else if contains(input, index, 2, "CK") ||
-		contains(input, index, 2, "CG") ||
-		contains(input, index, 2, "CQ") {
+	} else if input.Contains(index, 2, "CK") ||
+		input.Contains(index, 2, "CG") ||
+		input.Contains(index, 2, "CQ") {
 		result.add("K", "K")
 		index += 2
-	} else if contains(input, index, 2, "CI") ||
-		contains(input, index, 2, "CE") ||
-		contains(input, index, 2, "CY") {
-		if contains(input, index, 3, "CIO") ||
-			contains(input, index, 3, "CIE") ||
-			contains(input, index, 3, "CIA") {
+	} else if input.Contains(index, 2, "CI") ||
+		input.Contains(index, 2, "CE") ||
+		input.Contains(index, 2, "CY") {
+		if input.Contains(index, 3, "CIO") ||
+			input.Contains(index, 3, "CIE") ||
+			input.Contains(index, 3, "CIA") {
 			result.add("S", "X")
 		} else {
 			result.add("S", "S")
@@ -122,15 +122,15 @@ func handleC(input *String, result *metaphoneresult, index int) int {
 		index += 2
 	} else {
 		result.add("K", "K")
-		if contains(input, index+1, 2, " C") ||
-			contains(input, index+1, 2, " Q") ||
-			contains(input, index+1, 2, " G") {
+		if input.Contains(index+1, 2, " C") ||
+			input.Contains(index+1, 2, " Q") ||
+			input.Contains(index+1, 2, " G") {
 			index += 3
-		} else if (contains(input, index+1, 1, "C") ||
-			contains(input, index+1, 1, "K") ||
-			contains(input, index+1, 1, "Q")) &&
-			!(contains(input, index+1, 2, "CE") ||
-				contains(input, index+1, 2, "CI")) {
+		} else if (input.Contains(index+1, 1, "C") ||
+			input.Contains(index+1, 1, "K") ||
+			input.Contains(index+1, 1, "Q")) &&
+			!(input.Contains(index+1, 2, "CE") ||
+				input.Contains(index+1, 2, "CI")) {
 			index += 2
 		} else {
 			index++
@@ -140,11 +140,11 @@ func handleC(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleCC(input *String, result *metaphoneresult, index int) int {
-	if contains(input, index+2, 1, "I", "E", "H") &&
-		!contains(input, index+2, 2, "HU") {
-		if (index == 1 && charAt(input, index-1) == 'A') ||
-			(contains(input, index-1, 5, "UCCEE", "UCCES")) {
+func handleCC(input runestring, result *metaphoneresult, index int) int {
+	if input.Contains(index+2, 1, "I", "E", "H") &&
+		!input.Contains(index+2, 2, "HU") {
+		if (index == 1 && input.SafeAt(index-1) == 'A') ||
+			(input.Contains(index-1, 5, "UCCEE", "UCCES")) {
 			result.add("KS", "KS")
 		} else {
 			result.add("X", "X")
@@ -157,8 +157,8 @@ func handleCC(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleCH(input *String, result *metaphoneresult, index int) int {
-	if index > 0 && contains(input, index, 4, "CHAE") {
+func handleCH(input runestring, result *metaphoneresult, index int) int {
+	if index > 0 && input.Contains(index, 4, "CHAE") {
 		result.add("K", "X")
 		return index + 2
 	} else if conditionCH0(input, index) {
@@ -170,7 +170,7 @@ func handleCH(input *String, result *metaphoneresult, index int) int {
 		return index + 2
 	} else {
 		if index > 0 {
-			if contains(input, 0, 2, "MC") {
+			if input.Contains(0, 2, "MC") {
 				result.add("K", "K")
 			} else {
 				result.add("X", "K")
@@ -182,16 +182,16 @@ func handleCH(input *String, result *metaphoneresult, index int) int {
 	}
 }
 
-func handleD(input *String, result *metaphoneresult, index int) int {
-	if contains(input, index, 2, "DG") {
-		if contains(input, index+2, 1, "I", "E", "Y") {
+func handleD(input runestring, result *metaphoneresult, index int) int {
+	if input.Contains(index, 2, "DG") {
+		if input.Contains(index+2, 1, "I", "E", "Y") {
 			result.add("J", "J")
 			index += 3
 		} else {
 			result.add("TK", "TK")
 			index += 2
 		}
-	} else if contains(input, index, 2, "DT", "DD") {
+	} else if input.Contains(index, 2, "DT", "DD") {
 		result.add("T", "T")
 		index += 2
 	} else {
@@ -201,45 +201,45 @@ func handleD(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleG(input *String, result *metaphoneresult, index int, slavoGermanic bool) int {
-	if charAt(input, index+1) == 'H' {
+func handleG(input runestring, result *metaphoneresult, index int, slavoGermanic bool) int {
+	if input.SafeAt(index+1) == 'H' {
 		index = handleGH(input, result, index)
-	} else if charAt(input, index+1) == 'N' {
-		if index == 1 && isVowel(charAt(input, 0)) && !slavoGermanic {
+	} else if input.SafeAt(index+1) == 'N' {
+		if index == 1 && isVowel(input.SafeAt(0)) && !slavoGermanic {
 			result.add("KN", "N")
-		} else if !contains(input, index+2, 2, "EY") && charAt(input, index+1) != 'Y' && !slavoGermanic {
+		} else if !input.Contains(index+2, 2, "EY") && input.SafeAt(index+1) != 'Y' && !slavoGermanic {
 			result.add("N", "KN")
 		} else {
 			result.add("KN", "KN")
 		}
 		index += 2
-	} else if contains(input, index+1, 2, "LI") && !slavoGermanic {
+	} else if input.Contains(index+1, 2, "LI") && !slavoGermanic {
 		result.add("KL", "L")
 		index += 2
-	} else if index == 0 && (charAt(input, index+1) == 'Y' ||
-		contains(input, index+1, 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER")) {
+	} else if index == 0 && (input.SafeAt(index+1) == 'Y' ||
+		input.Contains(index+1, 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER")) {
 		result.add("K", "J")
 		index += 2
-	} else if (contains(input, index+1, 2, "ER") ||
-		charAt(input, index+1) == 'Y') &&
-		!contains(input, 0, 6, "DANGER", "RANGER", "MANGER") &&
-		!contains(input, index-1, 1, "E", "I") &&
-		!contains(input, index-1, 3, "RGY", "OGY") {
+	} else if (input.Contains(index+1, 2, "ER") ||
+		input.SafeAt(index+1) == 'Y') &&
+		!input.Contains(0, 6, "DANGER", "RANGER", "MANGER") &&
+		!input.Contains(index-1, 1, "E", "I") &&
+		!input.Contains(index-1, 3, "RGY", "OGY") {
 		result.add("K", "J")
 		index += 2
-	} else if contains(input, index+1, 1, "E", "I", "Y") ||
-		contains(input, index-1, 4, "AGGI", "OGGI") {
-		if contains(input, 0, 4, "VAN ", "VON ") ||
-			contains(input, 0, 3, "SCH") ||
-			contains(input, index+1, 2, "ET") {
+	} else if input.Contains(index+1, 1, "E", "I", "Y") ||
+		input.Contains(index-1, 4, "AGGI", "OGGI") {
+		if input.Contains(0, 4, "VAN ", "VON ") ||
+			input.Contains(0, 3, "SCH") ||
+			input.Contains(index+1, 2, "ET") {
 			result.add("K", "K")
-		} else if contains(input, index+1, 3, "IER") {
+		} else if input.Contains(index+1, 3, "IER") {
 			result.add("J", "J")
 		} else {
 			result.add("J", "K")
 		}
 		index += 2
-	} else if charAt(input, index+1) == 'G' {
+	} else if input.SafeAt(index+1) == 'G' {
 		result.add("K", "K")
 		index += 2
 	} else {
@@ -249,26 +249,26 @@ func handleG(input *String, result *metaphoneresult, index int, slavoGermanic bo
 	return index
 }
 
-func handleGH(input *String, result *metaphoneresult, index int) int {
-	if index > 0 && !isVowel(charAt(input, index-1)) {
+func handleGH(input runestring, result *metaphoneresult, index int) int {
+	if index > 0 && !isVowel(input.SafeAt(index-1)) {
 		result.add("K", "K")
 		index += 2
 	} else if index == 0 {
-		if charAt(input, index+2) == 'I' {
+		if input.SafeAt(index+2) == 'I' {
 			result.add("J", "J")
 		} else {
 			result.add("K", "K")
 		}
 		index += 2
-	} else if (index > 1 && contains(input, index-2, 1, "B", "H", "D")) ||
-		(index > 2 && contains(input, index-3, 1, "B", "H", "D")) ||
-		(index > 3 && contains(input, index-4, 1, "B", "H")) {
+	} else if (index > 1 && input.Contains(index-2, 1, "B", "H", "D")) ||
+		(index > 2 && input.Contains(index-3, 1, "B", "H", "D")) ||
+		(index > 3 && input.Contains(index-4, 1, "B", "H")) {
 		index += 2
 	} else {
-		if index > 2 && charAt(input, index-1) == 'U' &&
-			contains(input, index-3, 1, "C", "G", "L", "R", "T") {
+		if index > 2 && input.SafeAt(index-1) == 'U' &&
+			input.Contains(index-3, 1, "C", "G", "L", "R", "T") {
 			result.add("F", "F")
-		} else if index > 0 && charAt(input, index-1) != 'I' {
+		} else if index > 0 && input.SafeAt(index-1) != 'I' {
 			result.add("K", "K")
 		}
 		index += 2
@@ -276,9 +276,9 @@ func handleGH(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleH(input *String, result *metaphoneresult, index int) int {
-	if (index == 0 || isVowel(charAt(input, index-1))) &&
-		isVowel(charAt(input, index+1)) {
+func handleH(input runestring, result *metaphoneresult, index int) int {
+	if (index == 0 || isVowel(input.SafeAt(index-1))) &&
+		isVowel(input.SafeAt(index+1)) {
 		result.add("H", "H")
 		index += 2
 	} else {
@@ -287,30 +287,30 @@ func handleH(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleJ(input *String, result *metaphoneresult, index int, slavoGermanic bool) int {
-	if contains(input, index, 4, "JOSE") || contains(input, 0, 4, "SAN ") {
-		if (index == 0 && (charAt(input, index+4) == ' ') ||
-			input.RuneCount() == 4) || contains(input, 0, 4, "SAN ") {
+func handleJ(input runestring, result *metaphoneresult, index int, slavoGermanic bool) int {
+	if input.Contains(index, 4, "JOSE") || input.Contains(0, 4, "SAN ") {
+		if (index == 0 && (input.SafeAt(index+4) == ' ') ||
+			len(input) == 4) || input.Contains(0, 4, "SAN ") {
 			result.add("H", "H")
 		} else {
 			result.add("J", "H")
 		}
 		index++
 	} else {
-		if index == 0 && !contains(input, index, 4, "JOSE") {
+		if index == 0 && !input.Contains(index, 4, "JOSE") {
 			result.add("J", "A")
-		} else if isVowel(charAt(input, index-1)) && !slavoGermanic &&
-			(charAt(input, index+1) == 'A' || charAt(input, index+1) == 'O') {
+		} else if isVowel(input.SafeAt(index-1)) && !slavoGermanic &&
+			(input.SafeAt(index+1) == 'A' || input.SafeAt(index+1) == 'O') {
 			result.add("J", "H")
-		} else if index == (input.RuneCount() - 1) {
+		} else if index == (len(input) - 1) {
 			result.add("J", " ")
-		} else if !contains(input, index+1, 1,
+		} else if !input.Contains(index+1, 1,
 			"L", "T", "K", "S", "N", "M", "B", "Z") &&
-			!contains(input, index-1, 1, "S", "K", "L") {
+			!input.Contains(index-1, 1, "S", "K", "L") {
 			result.add("J", "J")
 		}
 
-		if charAt(input, index+1) == 'J' {
+		if input.SafeAt(index+1) == 'J' {
 			index += 2
 		} else {
 			index++
@@ -319,8 +319,8 @@ func handleJ(input *String, result *metaphoneresult, index int, slavoGermanic bo
 	return index
 }
 
-func handleL(input *String, result *metaphoneresult, index int) int {
-	if charAt(input, index+1) == 'L' {
+func handleL(input runestring, result *metaphoneresult, index int) int {
+	if input.SafeAt(index+1) == 'L' {
 		if conditionL0(input, index) {
 			result.add("L", "")
 		} else {
@@ -334,13 +334,13 @@ func handleL(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleP(input *String, result *metaphoneresult, index int) int {
-	if charAt(input, index+1) == 'H' {
+func handleP(input runestring, result *metaphoneresult, index int) int {
+	if input.SafeAt(index+1) == 'H' {
 		result.add("F", "F")
 		index += 2
 	} else {
 		result.add("P", "P")
-		if contains(input, index+1, 1, "P", "B") {
+		if input.Contains(index+1, 1, "P", "B") {
 			index += 2
 		} else {
 			index++
@@ -349,16 +349,16 @@ func handleP(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleR(input *String, result *metaphoneresult, index int, slavoGermanic bool) int {
-	if index == (input.RuneCount()-1) && !slavoGermanic &&
-		contains(input, index-2, 2, "IE") &&
-		!contains(input, index-4, 2, "ME", "MA") {
+func handleR(input runestring, result *metaphoneresult, index int, slavoGermanic bool) int {
+	if index == (len(input)-1) && !slavoGermanic &&
+		input.Contains(index-2, 2, "IE") &&
+		!input.Contains(index-4, 2, "ME", "MA") {
 		result.add("", "R")
 	} else {
 		result.add("R", "R")
 	}
 
-	if charAt(input, index+1) == 'R' {
+	if input.SafeAt(index+1) == 'R' {
 		index += 2
 	} else {
 		index++
@@ -366,46 +366,46 @@ func handleR(input *String, result *metaphoneresult, index int, slavoGermanic bo
 	return index
 }
 
-func handleS(input *String, result *metaphoneresult, index int, slavoGermanic bool) int {
-	if contains(input, index-1, 3, "ISL", "YSL") {
+func handleS(input runestring, result *metaphoneresult, index int, slavoGermanic bool) int {
+	if input.Contains(index-1, 3, "ISL", "YSL") {
 		index++
-	} else if index == 0 && contains(input, index, 5, "SUGAR") {
+	} else if index == 0 && input.Contains(index, 5, "SUGAR") {
 		result.add("X", "S")
 		index++
-	} else if contains(input, index, 2, "SH") {
-		if contains(input, index+1, 4, "HEIM", "HOEK", "HOLM", "HOLZ") {
+	} else if input.Contains(index, 2, "SH") {
+		if input.Contains(index+1, 4, "HEIM", "HOEK", "HOLM", "HOLZ") {
 			result.add("S", "S")
 		} else {
 			result.add("X", "X")
 		}
 		index += 2
-	} else if contains(input, index, 3, "SIO", "SIA") ||
-		contains(input, index, 4, "SIAN") {
+	} else if input.Contains(index, 3, "SIO", "SIA") ||
+		input.Contains(index, 4, "SIAN") {
 		if slavoGermanic {
 			result.add("S", "S")
 		} else {
 			result.add("S", "X")
 		}
 		index += 3
-	} else if (index == 0 && contains(input, index+1, 1, "M", "N", "L", "W")) ||
-		contains(input, index+1, 1, "Z") {
+	} else if (index == 0 && input.Contains(index+1, 1, "M", "N", "L", "W")) ||
+		input.Contains(index+1, 1, "Z") {
 		result.add("S", "X")
-		if contains(input, index+1, 1, "Z") {
+		if input.Contains(index+1, 1, "Z") {
 			index += 2
 		} else {
 			index++
 		}
-	} else if contains(input, index, 2, "SC") {
+	} else if input.Contains(index, 2, "SC") {
 		index = handleSC(input, result, index)
 	} else {
-		if index == input.RuneCount()-1 &&
-			contains(input, index-2, 2, "AI", "OI") {
+		if index == len(input)-1 &&
+			input.Contains(index-2, 2, "AI", "OI") {
 			result.add("", "S")
 		} else {
 			result.add("S", "S")
 		}
 
-		if contains(input, index+1, 1, "S", "Z") {
+		if input.Contains(index+1, 1, "S", "Z") {
 			index += 2
 		} else {
 			index++
@@ -414,22 +414,22 @@ func handleS(input *String, result *metaphoneresult, index int, slavoGermanic bo
 	return index
 }
 
-func handleSC(input *String, result *metaphoneresult, index int) int {
-	if charAt(input, index+2) == 'H' {
-		if contains(input, index+3, 2, "OO", "ER", "EN", "UY", "ED", "EM") {
-			if contains(input, index+3, 2, "ER", "EN") {
+func handleSC(input runestring, result *metaphoneresult, index int) int {
+	if input.SafeAt(index+2) == 'H' {
+		if input.Contains(index+3, 2, "OO", "ER", "EN", "UY", "ED", "EM") {
+			if input.Contains(index+3, 2, "ER", "EN") {
 				result.add("X", "SK")
 			} else {
 				result.add("SK", "SK")
 			}
 		} else {
-			if index == 0 && !isVowel(charAt(input, 3)) && charAt(input, 3) != 'W' {
+			if index == 0 && !isVowel(input.SafeAt(3)) && input.SafeAt(3) != 'W' {
 				result.add("X", "S")
 			} else {
 				result.add("X", "X")
 			}
 		}
-	} else if contains(input, index+2, 1, "I", "E", "Y") {
+	} else if input.Contains(index+2, 1, "I", "E", "Y") {
 		result.add("S", "S")
 	} else {
 		result.add("SK", "SK")
@@ -439,17 +439,17 @@ func handleSC(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleT(input *String, result *metaphoneresult, index int) int {
-	if contains(input, index, 4, "TION") {
+func handleT(input runestring, result *metaphoneresult, index int) int {
+	if input.Contains(index, 4, "TION") {
 		result.add("X", "X")
 		index += 3
-	} else if contains(input, index, 3, "TIA", "TCH") {
+	} else if input.Contains(index, 3, "TIA", "TCH") {
 		result.add("X", "X")
 		index += 3
-	} else if contains(input, index, 2, "TH") || contains(input, index, 3, "TTH") {
-		if contains(input, index+2, 2, "OM", "AM") ||
-			contains(input, 0, 4, "VAN ", "VON ") ||
-			contains(input, 0, 3, "SCH") {
+	} else if input.Contains(index, 2, "TH") || input.Contains(index, 3, "TTH") {
+		if input.Contains(index+2, 2, "OM", "AM") ||
+			input.Contains(0, 4, "VAN ", "VON ") ||
+			input.Contains(0, 3, "SCH") {
 			result.add("T", "T")
 		} else {
 			result.add("0", "T")
@@ -457,7 +457,7 @@ func handleT(input *String, result *metaphoneresult, index int) int {
 		index += 2
 	} else {
 		result.add("T", "T")
-		if contains(input, index+1, 1, "T", "D") {
+		if input.Contains(index+1, 1, "T", "D") {
 			index += 2
 		} else {
 			index++
@@ -466,25 +466,25 @@ func handleT(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleW(input *String, result *metaphoneresult, index int) int {
-	if contains(input, index, 2, "WR") {
+func handleW(input runestring, result *metaphoneresult, index int) int {
+	if input.Contains(index, 2, "WR") {
 		result.add("R", "R")
 		index += 2
 	} else {
-		if index == 0 && (isVowel(charAt(input, index+1)) ||
-			contains(input, index, 2, "WH")) {
-			if isVowel(charAt(input, index+1)) {
+		if index == 0 && (isVowel(input.SafeAt(index+1)) ||
+			input.Contains(index, 2, "WH")) {
+			if isVowel(input.SafeAt(index + 1)) {
 				result.add("A", "F")
 			} else {
 				result.add("A", "A")
 			}
 			index++
-		} else if (index == input.RuneCount()-1 && isVowel(charAt(input, index-1))) ||
-			contains(input, index-1, 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY") ||
-			contains(input, 0, 3, "SCH") {
+		} else if (index == len(input)-1 && isVowel(input.SafeAt(index-1))) ||
+			input.Contains(index-1, 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY") ||
+			input.Contains(0, 3, "SCH") {
 			result.add("", "F")
 			index++
-		} else if contains(input, index, 4, "WICZ", "WITZ") {
+		} else if input.Contains(index, 4, "WICZ", "WITZ") {
 			result.add("TS", "FX")
 			index += 4
 		} else {
@@ -494,18 +494,18 @@ func handleW(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleX(input *String, result *metaphoneresult, index int) int {
+func handleX(input runestring, result *metaphoneresult, index int) int {
 	if index == 0 {
 		result.add("S", "S")
 		index++
 	} else {
-		if !((index == input.RuneCount()-1) &&
-			(contains(input, index-3, 3, "IAU", "EAU") ||
-				contains(input, index-2, 2, "AU", "OU"))) {
+		if !((index == len(input)-1) &&
+			(input.Contains(index-3, 3, "IAU", "EAU") ||
+				input.Contains(index-2, 2, "AU", "OU"))) {
 			result.add("KS", "KS")
 		}
 
-		if contains(input, index+1, 1, "C", "X") {
+		if input.Contains(index+1, 1, "C", "X") {
 			index += 2
 		} else {
 			index++
@@ -514,19 +514,19 @@ func handleX(input *String, result *metaphoneresult, index int) int {
 	return index
 }
 
-func handleZ(input *String, result *metaphoneresult, index int, slavoGermanic bool) int {
-	if charAt(input, index+1) == 'H' {
+func handleZ(input runestring, result *metaphoneresult, index int, slavoGermanic bool) int {
+	if input.SafeAt(index+1) == 'H' {
 		result.add("J", "J")
 	} else {
-		if contains(input, index+1, 2, "ZO", "ZI", "ZA") ||
-			(slavoGermanic && (index > 0 && charAt(input, index-1) != 'T')) {
+		if input.Contains(index+1, 2, "ZO", "ZI", "ZA") ||
+			(slavoGermanic && (index > 0 && input.SafeAt(index-1) != 'T')) {
 			result.add("S", "TS")
 		} else {
 			result.add("S", "S")
 		}
 	}
 
-	if charAt(input, index+1) == 'Z' {
+	if input.SafeAt(index+1) == 'Z' {
 		index += 2
 	} else {
 		index++
@@ -537,67 +537,67 @@ func handleZ(input *String, result *metaphoneresult, index int, slavoGermanic bo
 /******************************************************************************
  * Complex conditional handlers for letters
  *****************************************************************************/
-func conditionC0(input *String, index int) bool {
-	if contains(input, index, 4, "CHIA") {
+func conditionC0(input runestring, index int) bool {
+	if input.Contains(index, 4, "CHIA") {
 		return true
 	} else if index <= 1 {
 		return false
-	} else if isVowel(charAt(input, index-2)) {
+	} else if isVowel(input.SafeAt(index - 2)) {
 		return false
-	} else if !contains(input, index-1, 3, "ACH") {
+	} else if !input.Contains(index-1, 3, "ACH") {
 		return false
 	} else {
-		c := charAt(input, index+2)
+		c := input.SafeAt(index + 2)
 		return (c != 'I' && c != 'E') ||
-			(contains(input, index-2, 6, "BACHER") ||
-				contains(input, index-2, 6, "MACHER"))
+			(input.Contains(index-2, 6, "BACHER") ||
+				input.Contains(index-2, 6, "MACHER"))
 	}
 }
 
-func conditionCH0(input *String, index int) bool {
+func conditionCH0(input runestring, index int) bool {
 	if index != 0 {
 		return false
-	} else if !contains(input, index+1, 5, "HARAC", "HARIS") &&
-		!contains(input, index+1, 3, "HOR", "HYM", "HIA", "HEM") {
+	} else if !input.Contains(index+1, 5, "HARAC", "HARIS") &&
+		!input.Contains(index+1, 3, "HOR", "HYM", "HIA", "HEM") {
 		return false
-	} else if contains(input, 0, 5, "CHORE") {
+	} else if input.Contains(0, 5, "CHORE") {
 		return false
 	} else {
 		return true
 	}
 }
 
-func conditionCH1(input *String, index int) bool {
+func conditionCH1(input runestring, index int) bool {
 	// good god this is ugly
-	return (contains(input, 0, 4, "VAN ", "VON ") || contains(input, 0, 3, "SCH")) ||
-		contains(input, index-2, 6, "ORCHES", "ARCHIT", "ORCHID") ||
-		contains(input, index+2, 1, "T", "S") ||
-		((contains(input, index-1, 1, "A", "O", "U", "E") || index == 0) &&
-			(contains(input, index+2, 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ") ||
-				index+1 == input.RuneCount()-1))
+	return (input.Contains(0, 4, "VAN ", "VON ") || input.Contains(0, 3, "SCH")) ||
+		input.Contains(index-2, 6, "ORCHES", "ARCHIT", "ORCHID") ||
+		input.Contains(index+2, 1, "T", "S") ||
+		((input.Contains(index-1, 1, "A", "O", "U", "E") || index == 0) &&
+			(input.Contains(index+2, 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ") ||
+				index+1 == len(input)-1))
 }
 
-func conditionL0(input *String, index int) bool {
-	if index == (input.RuneCount()-3) &&
-		contains(input, index-1, 4, "ILLO", "ILLA", "ALLE") {
+func conditionL0(input runestring, index int) bool {
+	if index == (len(input)-3) &&
+		input.Contains(index-1, 4, "ILLO", "ILLA", "ALLE") {
 		return true
-	} else if (contains(input, input.RuneCount()-2, 2, "AS", "OS") ||
-		contains(input, input.RuneCount()-1, 1, "A", "O")) &&
-		(contains(input, index-1, 4, "ALLE")) {
+	} else if (input.Contains(len(input)-2, 2, "AS", "OS") ||
+		input.Contains(len(input)-1, 1, "A", "O")) &&
+		(input.Contains(index-1, 4, "ALLE")) {
 		return true
 	} else {
 		return false
 	}
 }
 
-func conditionM0(input *String, index int) bool {
-	if charAt(input, index+1) == 'M' {
+func conditionM0(input runestring, index int) bool {
+	if input.SafeAt(index+1) == 'M' {
 		return true
 	}
 
-	return contains(input, index-1, 3, "UMB") &&
-		((index+1) == (input.RuneCount()-1) ||
-			contains(input, index+2, 2, "ER"))
+	return input.Contains(index-1, 3, "UMB") &&
+		((index+1) == (len(input)-1) ||
+			input.Contains(index+2, 2, "ER"))
 }
 
 // DoubleMetaphone computes the Double-Metaphone value of the input string.
@@ -610,8 +610,9 @@ func conditionM0(input *String, index int) bool {
 func DoubleMetaphone(s1 string) (string, string) {
 	// trim, upper space
 	s1 = cleanInput(s1)
+
 	// structure to traverse the string by code point, not byte
-	input := NewString(s1)
+	input := runestring(s1)
 
 	slavoGermanic := isSlavoGermanic(s1)
 
@@ -624,14 +625,14 @@ func DoubleMetaphone(s1 string) (string, string) {
 
 	result := newMetaphoneresult(4, true)
 
-	for !result.isComplete() && index <= (input.RuneCount()-1) {
-		c := rune(input.At(index))
+	for !result.isComplete() && index <= len(input)-1 {
+		c := rune(input.SafeAt(index))
 		switch c {
 		case 'A', 'E', 'I', 'O', 'U', 'Y':
 			index = handleVowel(result, index)
 		case 'B':
 			result.add("P", "P")
-			if charAt(input, index+1) == 'B' {
+			if input.SafeAt(index+1) == 'B' {
 				index += 2
 			} else {
 				index++
@@ -645,7 +646,7 @@ func DoubleMetaphone(s1 string) (string, string) {
 			index = handleD(input, result, index)
 		case 'F':
 			result.add("F", "F")
-			if charAt(input, index+1) == 'F' {
+			if input.SafeAt(index+1) == 'F' {
 				index += 2
 			} else {
 				index++
@@ -658,7 +659,7 @@ func DoubleMetaphone(s1 string) (string, string) {
 			index = handleJ(input, result, index, slavoGermanic)
 		case 'K':
 			result.add("K", "K")
-			if charAt(input, index+1) == 'K' {
+			if input.SafeAt(index+1) == 'K' {
 				index += 2
 			} else {
 				index++
@@ -674,7 +675,7 @@ func DoubleMetaphone(s1 string) (string, string) {
 			}
 		case 'N':
 			result.add("N", "N")
-			if charAt(input, index+1) == 'N' {
+			if input.SafeAt(index+1) == 'N' {
 				index += 2
 			} else {
 				index++
@@ -686,7 +687,7 @@ func DoubleMetaphone(s1 string) (string, string) {
 			index = handleP(input, result, index)
 		case 'Q':
 			result.add("K", "K")
-			if charAt(input, index+1) == 'Q' {
+			if input.SafeAt(index+1) == 'Q' {
 				index += 2
 			} else {
 				index++
@@ -699,7 +700,7 @@ func DoubleMetaphone(s1 string) (string, string) {
 			index = handleT(input, result, index)
 		case 'V':
 			result.add("F", "F")
-			if charAt(input, index+1) == 'V' {
+			if input.SafeAt(index+1) == 'V' {
 				index += 2
 			} else {
 				index++
