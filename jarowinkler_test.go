@@ -14,6 +14,7 @@ var jarotests = []struct {
 	{"martha", "marhta", 0.9444444444444445},
 	{"dwayne", "duane", 0.8222222222222223},
 	{"martüa", "marüta", 0.9444444444444445},
+	{"dr", "driveway", 0.75},
 }
 
 // Regular Jaro distance
@@ -36,6 +37,7 @@ var jarowtests = []struct {
 	{"dixon", "dicksonx", 0.8133333333333332},
 	{"martha", "marhta", 0.9611111111111111},
 	{"dwayne", "duane", 0.8400000000000001},
+	{"dr", "driveway", 0.8},
 }
 
 // Jaro-Winkler distance
