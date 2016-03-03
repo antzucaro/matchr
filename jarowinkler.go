@@ -97,7 +97,7 @@ func jaroWinklerBase(s1 string, s2 string,
 			j = minLength
 		}
 
-		for i = 0; i < j && r1[i] == r2[i] && nan(r1[i]); i++ {
+		for i = 0; i < j && len(r1) > i && len(r2) > i && r1[i] == r2[i] && nan(r1[i]); i++ {
 		}
 
 		if i > 0 {
