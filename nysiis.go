@@ -3,12 +3,7 @@ package matchr
 // NYSIIS computes the NYSIIS phonetic encoding of the input string. It is a
 // modification of the traditional Soundex algorithm.
 func NYSIIS(s1 string) string {
-	if len(s1) == 0 {
-		return ""
-	}
-
 	cleans1 := runestring(cleanInput(s1))
-
 	input := runestring(make([]rune, 0, len(s1)))
 
 	// The output can't be larger than the string itself
@@ -19,6 +14,10 @@ func NYSIIS(s1 string) string {
 		if v >= 65 && v <= 90 {
 			input = append(input, v)
 		}
+	}
+
+	if len(input) == 0 {
+		return ""
 	}
 
 	// 1. Transcoding first characters

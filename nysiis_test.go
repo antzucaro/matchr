@@ -39,6 +39,9 @@ var nysiistests = []struct {
 	{"Carlson", "CARLSA"},
 	{"Wheeler", "WALAR"},
 	{"Louis XVI", "LASXV"},
+	{"2002", ""},
+	{"1/2", ""},
+	{"", ""},
 }
 
 // NYSIIS
