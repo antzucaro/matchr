@@ -1,5 +1,7 @@
 # matchr
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/antzucaro/matchr.svg)](https://pkg.go.dev/github.com/antzucaro/matchr)
+
 An approximate string matching library for the [Go programming language](http://www.golang.org).
 
 ## Rationale
